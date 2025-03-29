@@ -1,10 +1,16 @@
 package org.example.lab_2.domain.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
+import org.eclipse.persistence.annotations.JoinFetch;
+import org.eclipse.persistence.annotations.JoinFetchType;
 import org.hibernate.annotations.Comment;
-
-import javax.persistence.*;
 import java.math.BigDecimal;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 @Entity
 @Table(name = "purchase_item_tab", schema = "eq_shop")
@@ -12,17 +18,17 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class PurchaseItem {
 
     @Id
-    @Comment("Идентификатор покупки. Внешний ключ к purchase_tab.id. Часть составного PK")
-    @Column(name = "purchase_id", nullable = false)
-    private Long purchaseId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Id
-    @Comment("Идентификатор продукта. Внешний ключ к product_tab.id. Часть составного PK")
-    @Column(name = "product_id", nullable = false)
-    private Integer productId;
+//    @ManyToOne
+////    @JoinColumn(name = "purchase_id")
+//    @JoinFetch(JoinFetchType.OUTER)
+//    private Purchase purchase;
 
     @Comment("Количество товара")
     @Column(name = "product_count", nullable = false)
@@ -33,13 +39,17 @@ public class PurchaseItem {
     private BigDecimal productPrice;
 
 
-
-    // Связи
-    @ManyToOne
-    @JoinColumn(name = "purchase_id", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_purchase"))
-    private Purchase purchase; // Связь с сущностью Purchase
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", insertable = false, updatable = false, foreignKey = @ForeignKey(name = "fk_product"))
-    private Product product; // Связь с сущностью Product
+    @OneToMany
+//    @MapsId("productId")  // Ссылается на поле productId в PurchaseItemId
+    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "fk_product"))
+    private List<Product> products;
 }
+
+
+
+
+
+
+
+
+

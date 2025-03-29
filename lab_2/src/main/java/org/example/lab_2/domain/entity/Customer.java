@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Customer {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("Идентификатор покупателя")
@@ -33,7 +32,7 @@ public class Customer {
     private String middleName;
 
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Purchase> purchases = new ArrayList<>();
+//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+//    private List<Purchase> purchases = new ArrayList<>();
 
 }

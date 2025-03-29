@@ -1,6 +1,8 @@
 package org.example.lab_2.domain.entity;
 
 import lombok.*;
+import org.eclipse.persistence.annotations.JoinFetch;
+import org.eclipse.persistence.annotations.JoinFetchType;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
@@ -18,8 +20,9 @@ public class Purchase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "purchase_id")
     @Comment("Идентификатор покупки")
-    private Long id;
+    private Long purchase_id;
 
     @Comment("Дата покупки")
     @Column(name = "purchase_date", nullable = false)
@@ -30,14 +33,8 @@ public class Purchase {
     @JoinColumn(name = "customer_id", nullable = false, foreignKey = @ForeignKey(name = "fk_customer"))
     private Customer customer;
 
-    @Comment("Идентификатор филиала. Внешний ключ к store_tab.id")
-    @ManyToOne
-    @JoinColumn(name = "store_id", nullable = false, foreignKey = @ForeignKey(name = "fk_store"))
-    private Store store;
-
-
-
-    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "purchase")
+    @JoinFetch(JoinFetchType.OUTER)
     private List<PurchaseItem> items = new ArrayList<>();
 
 

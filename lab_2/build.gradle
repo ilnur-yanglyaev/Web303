@@ -30,12 +30,23 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-database-postgresql'
 	implementation 'javax.persistence:javax.persistence-api:2.2'
+//	implementation 'jakarta.annotation:javax.annotation-api:3.0.0'
+//	implementation 'javax.persistence:javax.annotationsi:2.2'
+	implementation 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.7.9'
+
+	implementation 'org.hibernate:hibernate-core:6.5.2.Final' // Убедитесь, что используете последнюю стабильную версию
+
+	// Hibernate Validator (если вам нужно валидация)
+	implementation 'org.hibernate.validator:hibernate-validator:6.2.0.Final' // Убедитесь, что используете последнюю стабильную версию
+
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 }
 
 generateJava {
