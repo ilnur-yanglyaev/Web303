@@ -1,4 +1,9 @@
 package org.example.lab_2.service;
 
-public class CustomerService {
+import org.example.lab_2.domain.entity.Category;
+import org.example.lab_2.domain.entity.Product;
+
+import java.util.List;
+
+public interface CustomerService {
 }

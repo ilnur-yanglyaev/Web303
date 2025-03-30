@@ -1,7 +1,7 @@
 
 -- Создание таблицы customer_tab с комментарием
 CREATE TABLE eq_shop.customer_tab (
-                                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                      id serial PRIMARY KEY,
                                       first_name VARCHAR(100) NOT NULL,
                                       middle_name VARCHAR(100),
                                       last_name VARCHAR(100) NOT NULL

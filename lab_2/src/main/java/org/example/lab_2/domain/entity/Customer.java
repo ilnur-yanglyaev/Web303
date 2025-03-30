@@ -1,9 +1,10 @@
 package org.example.lab_2.domain.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 
-import javax.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Customer {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     @Comment("Идентификатор покупателя")
     private Long id;
 
@@ -33,7 +34,12 @@ public class Customer {
     private String middleName;
 
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Purchase> purchases = new ArrayList<>();
+//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+//    private List<Purchase> purchases;
+
+    public Customer(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
 }

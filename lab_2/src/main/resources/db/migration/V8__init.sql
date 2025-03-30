@@ -1,14 +1,16 @@
 -- Создание таблицы purchase_items_tab с комментарием
 CREATE TABLE eq_shop.purchase_items_tab (
-                                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                            id serial PRIMARY KEY,
                                             purchase_id BIGINT NOT NULL,
                                             product_id BIGINT NOT NULL ,
                                             product_count INT NOT NULL,
-                                            product_price DECIMAL(10, 2) NOT NULL ,
+                                            product_price DECIMAL(10, 2) NOT NULL,
                                             FOREIGN KEY (purchase_id) REFERENCES eq_shop.purchase_tab(id),
                                             FOREIGN KEY (product_id) REFERENCES eq_shop.product_tab(id)
-) COMMENT = 'Таблица для хранения информации о товара, купленных в рамках одной покупки (товар в
-счете на оплату)';
+);
+
+-- COMMENT = 'Таблица для хранения информации о товара, купленных в рамках одной покупки (товар в
+-- счете на оплату)';
 
 -- Вставка данных в таблицу purchase_items_tab
 INSERT INTO eq_shop.purchase_items_tab (purchase_id, product_id, product_count, product_price) VALUES

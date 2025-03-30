@@ -1,6 +1,8 @@
 package org.example.lab_2.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.eclipse.persistence.annotations.JoinFetch;
+import org.eclipse.persistence.annotations.JoinFetchType;
 import org.hibernate.annotations.Comment;
 
 import java.util.List;
@@ -21,6 +23,7 @@ public class Manufacturer {
     @Comment("Наименование производителя")
     private String name;
 
-    @OneToMany(mappedBy = "manufacturer")  // Связь с множеством товаров
-    private List<Product> products;  // Связь с сущностью Product
+    @OneToMany(mappedBy = "manufacturer")
+//    @JoinFetch(JoinFetchType.OUTER)
+    private List<Product> products;
 }

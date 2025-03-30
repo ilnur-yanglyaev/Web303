@@ -17,13 +17,14 @@
 #globally_quoted_identifiers: true
 
 spring:
-  datasource:
+  flyway:
+    locations: classpath:db/migration
+    enabled: true
+
+datasource:
     equipment:
       pool-name: equipment
       driver-class-name: org.postgresql.Driver
-      jdbc-url: jdbc:postgresql://localhost:5432/equipment.shop
+      jdbc-url: jdbc:postgresql://localhost:5432/client_data_db
       username: postgres
       password: 123321
-  flyway:
-  locations: classpath:db/migration
-  enabled: true

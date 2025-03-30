@@ -2,6 +2,8 @@ package org.example.lab_2.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.eclipse.persistence.annotations.JoinFetch;
+import org.eclipse.persistence.annotations.JoinFetchType;
 import org.hibernate.annotations.Comment;
 
 import java.util.List;
@@ -22,7 +24,8 @@ public class Category {
     @Comment("Наименование категории")
     private String name;
 
-    @OneToMany(mappedBy = "category")  // Указываем связь один ко многим с продуктами
-    private List<Product> products;   // Связь с сущностью Product
+    @OneToMany(mappedBy = "category")
+    @JoinFetch(JoinFetchType.OUTER)
+    private List<Product> products;
 
 }
