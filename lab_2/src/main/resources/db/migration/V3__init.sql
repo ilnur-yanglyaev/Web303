@@ -4,9 +4,11 @@ CREATE TABLE eq_shop.product_tab (
                                      name VARCHAR(200) NOT NULL,
                                      manufacturer_id BIGINT NOT NULL,
                                      category_id BIGINT NOT NULL,
---                                      FOREIGN KEY (manufacturer_id) REFERENCES eq_shop.manufacturer_tab(id),
+                                     FOREIGN KEY (manufacturer_id) REFERENCES eq_shop.manufacturer_tab(id),
                                      FOREIGN KEY (category_id) REFERENCES eq_shop.category_tab(id));
--- ) COMMENT = 'Таблица для хранения товаров';
+
+
+--  COMMENT = 'Таблица для хранения товаров';
 
 -- Вставка данных в таблицу product_tab
 INSERT INTO eq_shop.product_tab (name, manufacturer_id, category_id) VALUES

@@ -2,15 +2,10 @@ package org.example.lab_2.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.eclipse.persistence.annotations.JoinFetch;
-import org.eclipse.persistence.annotations.JoinFetchType;
 import org.hibernate.annotations.Comment;
 import java.math.BigDecimal;
-import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 
 @Entity
 @Table(name = "purchase_item_tab", schema = "eq_shop")

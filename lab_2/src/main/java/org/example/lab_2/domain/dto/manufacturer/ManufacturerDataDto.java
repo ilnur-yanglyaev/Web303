@@ -13,3 +13,4 @@ public class ManufacturerDataDto {
     private Long count;
     private Double percent;
 }
+
