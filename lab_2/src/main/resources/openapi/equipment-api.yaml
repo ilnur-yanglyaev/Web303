@@ -1,0 +1,285 @@
+openapi: 3.0.3
+info:
+  title: Сервис equipment-shop
+  version: 0.0.1
+  description: API equipment-shop service
+tags:
+  - name: ManufacturerApi
+    description: Методы для отображения данных о производителях
+  - name: CustomerApi
+    description: Методы для работы с покупателями
+
+paths:
+  /api/v1/manufacturerStatistic:
+    get:
+      tags:
+        - manufacturerStatistic
+      summary: Список популярных производителей в порядке убывания количества проданного товара
+      responses:
+        '200':
+          $ref: '#/components/responses/ManufacturerStatisticDto'
+        '404':
+          $ref: '#/components/responses/NotFoundErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalErrorResponse'
+
+  /api/v1/customer/{customerId}/purchases:
+    get:
+      tags:
+        - CustomerApi
+      summary: Вывести все покупки пользователя с указанным идентификатором
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Список покупок пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerPurchasesDto'
+        '404':
+          $ref: '#/components/responses/NotFoundErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalErrorResponse'
+
+  /api/v1/purchases/customersInfo:
+    get:
+      tags:
+        - CustomerApi
+      summary: Вывести всех покупателей, которые совершали покупки и вывести количество этих покупок
+      responses:
+        '200':
+          description: Список покупателей с информацией о покупках
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomersInfoDto'
+        '500':
+          $ref: '#/components/responses/InternalErrorResponse'
+
+
+components:
+  responses:
+    ManufacturerStatisticDto:
+      description: Список производителей
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ManufacturerStatisticDto'
+          examples:
+            complex:
+              $ref: '#/components/examples/ManufacturerStatisticDtoExample'
+    InternalErrorResponse:
+      description: Internal error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDto'
+          examples:
+            code500:
+              $ref: '#/components/examples/Error500Example'
+    NotFoundErrorResponse:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDto'
+          examples:
+            code404:
+              $ref: '#/components/examples/Error404Example'
+  schemas:
+    ManufacturerStatisticDto:
+      type: object
+      properties:
+        total:
+          description: Общее количество покупок
+          type: integer
+          format: int64
+        manufacturerList:
+          type: array
+          description: Список производителей
+          items:
+            type: object
+            properties:
+              manufacturerName:
+                description: Общее количество покупок производителя
+                type: string
+              count:
+                description: Количество проданного товара
+                type: integer
+                format: int64
+              percent:
+                description: Процентное соотношение проданного товара производителем относительно общего количества покупок
+                type: number
+                format: double
+    ErrorDto:
+      type: object
+      required:
+        - id
+        - code
+        - message
+      properties:
+        id:
+          type: string
+          description: Уникальный UUID для логов и отладки
+        code:
+          type: string
+          description: Код ошибки текстом
+        message:
+          type: string
+          description: Описание ошибки для разработчиков
+        description:
+          type: string
+          description: Описание ошибки для пользователей
+
+
+    CustomerPurchasesDto:
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/CustomerDto'
+        purchiseList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseDto'
+
+    CustomerDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        secondName:
+          type: string
+
+    PurchaseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        purchaseDate:
+          type: string
+          format: date-time
+        itemList:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseItemDto'
+
+    PurchaseItemDto:
+      type: object
+      properties:
+        productName:
+          type: string
+        count:
+          type: integer
+          format: int32
+        price:
+          type: number
+          format: double
+        totalPrice:
+          type: number
+          format: double
+          readOnly: true
+          description: Автоматически вычисляемое поле (count * price)
+
+    CustomersInfoDto:
+      type: object
+      properties:
+        customerList:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerInfoDto'
+
+    CustomerInfoDto:
+      type: object
+      properties:
+        name:
+          type: string
+        secondName:
+          type: string
+        purchaseCount:
+          type: integer
+          format: int32
+
+
+  examples:
+    ManufacturerStatisticDtoExample:
+      value:
+        total: 100
+        manufacturerList:
+          - manufacturerName: "Bosch"
+            count: 50
+            percent: 50.0
+          - manufacturerName: "Tefal"
+            count: 28
+            percent: 28.0
+          - manufacturerName: "LG"
+            count: 12
+            percent: 12.0
+          - manufacturerName: "Samsung"
+            count: 10
+            percent: 10.0
+    Error404Example:
+      summary: Not Found
+      description: Не найдено
+      value:
+        id: 'ab5a11cd-13cc-4e33-af8b-75a74e18dd09'
+        code: 'not_found'
+        message: 'Not found'
+        description: 'Ресурс не найден'
+    Error500Example:
+      summary: Internal Error
+      description: Ошибка запроса данных с сервера
+      value:
+        id: '4d8d97d2-d4ee-11eb-b8bc-0242ac130003'
+        code: 'internal_server_error'
+        message: 'Null Pointer Exception'
+        description: 'Внутренняя ошибка сервера'
+
+
+    CustomerPurchasesExample:
+      value:
+        customer:
+          id: 123
+          name: "Иван"
+          secondName: "Иванов"
+        purchiseList:
+          - id: 1
+            purchaseDate: "2023-01-15T14:30:00Z"
+            itemList:
+              - productName: "Дрель Bosch"
+                count: 1
+                price: 5999.99
+                totalPrice: 5999.99
+              - productName: "Набор бит"
+                count: 2
+                price: 499.50
+                totalPrice: 999.00
+          - id: 2
+            purchaseDate: "2023-02-20T10:15:00Z"
+            itemList:
+              - productName: "Перфоратор"
+                count: 1
+                price: 12999.00
+                totalPrice: 12999.00
+
+    CustomersInfoExample:
+      value:
+        customerList:
+          - name: "Иван"
+            secondName: "Иванов"
+            purchaseCount: 5
+          - name: "Петр"
+            secondName: "Петров"
+            purchaseCount: 3
+          - name: "Сергей"
+            secondName: "Сергеев"
+            purchaseCount: 7

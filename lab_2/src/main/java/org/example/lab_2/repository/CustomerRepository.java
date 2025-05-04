@@ -1,14 +1,15 @@
 package org.example.lab_2.repository;
 
-import org.example.lab_2.domain.dto.customer.CustomerInfoDto;
+
 import org.example.lab_2.domain.dto.customer.CustomerPurchaseDto;
 import org.example.lab_2.domain.dto.customer.CustomersInfoDto;
 import org.example.lab_2.domain.entity.Customer;
-import org.example.lab_2.domain.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.example.lab_2.model.rest.model.CustomerInfoDto;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -35,4 +36,22 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "FROM eq_shop.customer_tab c JOIN eq_shop.purchase_tab p on c.id = p.customer_id " +
             " GROUP BY c.id, c.first_name, c.last_name", nativeQuery = true)
     List<CustomersInfoDto> findCustomersWithPurchase();
+
+
+//    @Query("SELECT p FROM eq_shop.purchase_tab p WHERE p.customer.id = :customerId")
+//    List<Purchase> findPurchasesByCustomerId(@Param("customerId") Long customerId);
+
+
+    @Query(value = "SELECT c.first_name AS name, c.last_name AS secondName, COUNT(p.id) AS purchaseCount " +
+            "FROM eq_shop.customer_tab c JOIN eq_shop.purchase_tab p ON c.id = p.customer_id " +
+            "GROUP BY c.id, c.first_name, c.last_name",
+            nativeQuery = true)
+    List<CustomerPurchaseInfo> findCustomersWithPurchaseGen();
+
+    interface CustomerPurchaseInfo {
+        String getName();
+        String getSecondName();
+        Integer getPurchaseCount();
+    }
+
 }
