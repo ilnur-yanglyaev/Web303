@@ -1,8 +1,11 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.3'
+
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'com.netflix.dgs.codegen' version '7.0.3'
+	id("org.openapi.generator") version "7.9.0"
 }
 
 group = 'org.example'
@@ -34,12 +37,31 @@ dependencies {
 //	implementation 'javax.persistence:javax.annotationsi:2.2'
 	implementation 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.7.9'
 
-	implementation 'org.hibernate:hibernate-core:6.5.2.Final' // Убедитесь, что используете последнюю стабильную версию
-
+	implementation 'org.hibernate:hibernate-core:6.5.2.Final'
 	// Hibernate Validator (если вам нужно валидация)
-	implementation 'org.hibernate.validator:hibernate-validator:6.2.0.Final' // Убедитесь, что используете последнюю стабильную версию
+	implementation 'org.hibernate.validator:hibernate-validator:6.2.0.Final'
 
 
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.flywaydb:flyway-database-postgresql'
+
+	// Для OpenAPI генератора (если используете spring-cloud)
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.1'
+	implementation 'io.swagger.core.v3:swagger-annotations:2.2.20'
+	implementation 'io.swagger.core.v3:swagger-models:2.2.20'
+
+	// Или для SpringDoc (если используете его)
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+
+
+//	implementation 'com.example:my-library:1.0.0'
+//	implementation 'com.example:my-library:0.0.1-SNAPSHOT'
+	implementation files('D:/Users/User/Projects/Web303/my-library/target/my-library-0.0.1-SNAPSHOT.jar')
+
+
+//
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
@@ -57,4 +79,42 @@ generateJava {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.register("equipment-api", GenerateTask.class, {
+	generatorName = "spring"
+	inputSpec = "D:/Users/User/Projects/Web303/lab_2/src/main/resources/openapi/equipment-api.yaml"
+	outputDir = "${buildDir.path}/generated-sources/swagger/".toString()
+	apiPackage = "org.example.lab_2.model.rest.controller.api"
+	modelPackage = "org.example.lab_2.model.rest.model"
+	configOptions = [
+			skipDefaultInterface : "true",
+			dateLibrary : "java8-localdatetime",
+			serializableModel : "true",
+			interfaceOnly : "true",
+			hideGenerationTimestamp : "true",
+			useBeanValidation : "true",
+			generateSupportingFiles : "false",
+			swaggerDocketConfig : "false",
+			useTags : "true",
+			library : "spring-cloud",
+			openApiNullable : "false",
+			useSpringBoot3 : "true"
+	]
+	globalProperties = [
+			apis : '',
+			models: '',
+	]
+	typeMappings = [
+			Double: "java.math.BigDecimal"
+	]
+})
+tasks.compileJava.dependsOn("equipment-api")
+
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/main/java', "${buildDir}/generated-sources/swagger/src/main/java"]
+		}
+	}
 }

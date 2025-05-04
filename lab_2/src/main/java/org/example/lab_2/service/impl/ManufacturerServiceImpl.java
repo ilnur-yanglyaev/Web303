@@ -6,6 +6,9 @@ import org.example.lab_2.domain.dto.manufacturer.ManufacturerInfoDto;
 import org.example.lab_2.repository.ManufacturerRepository;
 import org.springframework.stereotype.Service;
 
+import com.example.exception.*;
+
+
 import java.util.List;
 
 @Service
@@ -17,7 +20,9 @@ public class ManufacturerServiceImpl {
     public ManufacturerInfoDto getManufacturerInfo() {
         List<ManufacturerDataDto> manufacturerData = manufacturerRepository.getManufacturerData();
 
-        // Рассчитываем общее количество
+        if (manufacturerData.isEmpty()) {
+            throw new NotFoundApiException();
+        }
         Long totalSales = manufacturerRepository.getTotal();
 
         return new ManufacturerInfoDto(totalSales, manufacturerData);

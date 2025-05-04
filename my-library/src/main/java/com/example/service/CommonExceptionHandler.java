@@ -2,11 +2,11 @@ package com.example.service;
 
 import com.example.exception.*;
 import com.example.model.ErrorDto;
-import com.example.utils.RequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -16,81 +16,39 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class CommonExceptionHandler {
 
-    @Autowired
-    private HttpServletRequest request;
-
-    // Обработка NotFoundApiException (ресурс не найден)
     @ExceptionHandler(NotFoundApiException.class)
-    public ResponseEntity<ErrorDto> handleNotFoundApiException(NotFoundApiException ex) {
+    public ResponseEntity<ErrorDto> handleNotFoundException(NotFoundApiException ex) {
         log.warn("Resource not found: {}", ex.getMessage(), ex);
-
-        ErrorDto errorDto = new ErrorDto(
-                RequestUtils.getXRequestIdHeader(request), // Извлекаем ID запроса
-                ex.getCode(),
-                ex.getMessage(),
-                ex.getDescription()
-        );
-
+        ErrorDto errorDto = new ErrorDto(ex.getCode(), ex.getMessage(), ex.getDescription());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDto);
     }
 
-    // Обработка BadRequestApiException (ошибка валидации входных параметров)
     @ExceptionHandler(BadRequestApiException.class)
-    public ResponseEntity<ErrorDto> handleBadRequestApiException(BadRequestApiException ex) {
+    public ResponseEntity<ErrorDto> handleBadRequestException(BadRequestApiException ex) {
         log.warn("Bad request: {}", ex.getMessage(), ex);
-
-        ErrorDto errorDto = new ErrorDto(
-                RequestUtils.getXRequestIdHeader(request),
-                ex.getCode(),
-                ex.getMessage(),
-                ex.getDescription()
-        );
-
+        ErrorDto errorDto = new ErrorDto(ex.getCode(), ex.getMessage(), ex.getDescription());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
     }
 
-    // Обработка ConflictApiException (логические конфликты)
     @ExceptionHandler(ConflictApiException.class)
-    public ResponseEntity<ErrorDto> handleConflictApiException(ConflictApiException ex) {
-        log.warn("Conflict occurred: {}", ex.getMessage(), ex);
-
-        ErrorDto errorDto = new ErrorDto(
-                RequestUtils.getXRequestIdHeader(request),
-                ex.getCode(),
-                ex.getMessage(),
-                ex.getDescription()
-        );
-
+    public ResponseEntity<ErrorDto> handleConflictException(ConflictApiException ex) {
+        log.warn("Conflict: {}", ex.getMessage(), ex);
+        ErrorDto errorDto = new ErrorDto(ex.getCode(), ex.getMessage(), ex.getDescription());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorDto);
     }
 
-    // Обработка InternalApiException (внутренние ошибки)
     @ExceptionHandler(InternalApiException.class)
-    public ResponseEntity<ErrorDto> handleInternalApiException(InternalApiException ex) {
-        log.error("Internal server error: {}", ex.getMessage(), ex);
-
-        ErrorDto errorDto = new ErrorDto(
-                RequestUtils.getXRequestIdHeader(request),
-                ex.getCode(),
-                ex.getMessage(),
-                ex.getDescription()
-        );
-
+    public ResponseEntity<ErrorDto> handleInternalException(InternalApiException ex) {
+        log.warn("Internal server error: {}", ex.getMessage(), ex);
+        ErrorDto errorDto = new ErrorDto(ex.getCode(), ex.getMessage(), ex.getDescription());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDto);
     }
 
-    // Обработка всех остальных исключений
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDto> handleGenericException(Exception ex) {
-        log.error("Unexpected exception occurred: {}", ex.getMessage(), ex);
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorDto> handleAllExceptions(Exception ex) {
+//        ErrorDto errorDto = new ErrorDto("internal_error","Внутренняя ошибка сервера",
+//                "Произошла непредвиденная ошибка");
+//        return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
-        ErrorDto errorDto = new ErrorDto(
-                RequestUtils.getXRequestIdHeader(request),
-                "internal_error",
-                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                "Произошла непредвиденная ошибка"
-        );
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDto);
-    }
 }

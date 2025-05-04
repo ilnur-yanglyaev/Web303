@@ -1,17 +1,22 @@
 package com.example.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.exception.BaseApiException;
+import lombok.*;
 
 import java.util.UUID;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class ErrorDto {
-    private String id;          // Уникальный идентификатор запроса
-    private String code;        // Код ошибки
-    private String message;     // Сообщение об ошибке
-    private String description; // Подробное описание
+    private String id ;
+    private String code;
+    private String message;
+    private String description;
+
+    public ErrorDto(String code, String message, String description) {
+        this.id = UUID.randomUUID().toString();
+        this.code = code;
+        this.message = message;
+        this.description = description;
+    }
 }
