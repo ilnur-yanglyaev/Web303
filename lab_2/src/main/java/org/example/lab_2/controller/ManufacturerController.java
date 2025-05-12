@@ -6,9 +6,6 @@ import org.example.lab_2.service.impl.ManufacturerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.example.lab_2.domain.dto.manufacturer.*;
-
-import java.util.List;
 
 @AllArgsConstructor
 @RestController

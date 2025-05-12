@@ -1,0 +1,77 @@
+openapi: 3.0.3
+info:
+  title: Сервис equipment-shop-discount-service
+  version: 0.0.1
+  description: API equipment-shop-discount-service
+tags:
+  - name: CategoryDiscountApi
+    description: Методы для отображения скидок для категорий товаров
+paths:
+  /api/v1/{categoryId}/discount:
+    get:
+      tags:
+        - CategoryDiscountInfo
+      parameters:
+        - $ref: '#/components/parameters/categoryId'
+      summary: Cкидка для указанной категории товара
+      responses:
+        '200':
+          $ref: '#/components/responses/CategoryDiscountInfoDto'
+        '500':
+          $ref: '#/components/responses/InternalErrorResponse'
+components:
+  parameters:
+    categoryId:
+      name: categoryId
+      in: path
+      description: Идентификатор  категории
+      required: true
+      schema:
+        type: integer
+        format: int64
+  responses:
+    CategoryDiscountInfoDto:
+      description: Cкидка для указанной категории товара
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CategoryDiscountInfoDto'
+    InternalErrorResponse:
+      description: Internal error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDto'
+  schemas:
+    CategoryDiscountInfoDto:
+      type: object
+      properties:
+        categoryId:
+          description: Идентификатор категории
+          nullable: false
+          type: integer
+          format: int64
+        discount:
+          description: Скидка в процентах
+          nullable: false
+          type: integer
+          format: int64
+    ErrorDto:
+      type: object
+      required:
+        - id
+        - code
+        - message
+      properties:
+        id:
+          type: string
+          description: Уникальный UUID для логов и отладки
+        code:
+          type: string
+          description: Код ошибки текстом
+        message:
+          type: string
+          description: Описание ошибки для разработчиков
+        description:
+          type: string
+          description: Описание ошибки для пользователей

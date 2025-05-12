@@ -8,8 +8,6 @@ import org.eclipse.persistence.annotations.JoinFetch;
 import org.eclipse.persistence.annotations.JoinFetchType;
 import org.hibernate.annotations.Comment;
 
-import java.util.List;
-
 @Entity
 @Table(name = "product_tab", schema = "eq_shop")
 @Getter

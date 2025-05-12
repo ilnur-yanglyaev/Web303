@@ -1,8 +1,6 @@
 package org.example.lab_2.controller.generated;
 
 
-import org.example.lab_2.domain.dto.customer.CustomerPurchaseDto;
-import org.example.lab_2.domain.dto.customer.CustomerPurchaseItemDto;
 import org.example.lab_2.domain.entity.Customer;
 import org.example.lab_2.model.rest.model.*;
 import org.example.lab_2.repository.CustomerRepository;
