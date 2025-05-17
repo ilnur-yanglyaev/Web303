@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @RestController
 public class DiscountController implements CategoryDiscountInfoApi {
-    // Статическая структура данных для хранения категорий и скидок
     private static final CategoryDiscountInfoDto[] CATEGORY_DISCOUNTS = {
             createDiscountDto(1L, 5L),
             createDiscountDto(2L, 10L),
@@ -19,7 +18,13 @@ public class DiscountController implements CategoryDiscountInfoApi {
             createDiscountDto(4L, 15L),
             createDiscountDto(5L, 7L)
     };
-
+    // Вспомогательный метод для создания DTO
+    private static CategoryDiscountInfoDto createDiscountDto(Long categoryId, Long discount) {
+        CategoryDiscountInfoDto dto = new CategoryDiscountInfoDto();
+        dto.setCategoryId(categoryId);
+        dto.setDiscount(discount);
+        return dto;
+    }
 
     @Override
     public ResponseEntity<CategoryDiscountInfoDto> apiV1CategoryIdDiscountGet(Long categoryId) {
@@ -36,11 +41,4 @@ public class DiscountController implements CategoryDiscountInfoApi {
         }
     }
 
-    // Вспомогательный метод для создания DTO
-    private static CategoryDiscountInfoDto createDiscountDto(Long categoryId, Long discount) {
-        CategoryDiscountInfoDto dto = new CategoryDiscountInfoDto();
-        dto.setCategoryId(categoryId);
-        dto.setDiscount(discount);
-        return dto;
-    }
 }

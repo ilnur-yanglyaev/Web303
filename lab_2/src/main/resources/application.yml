@@ -1,3 +1,9 @@
+server:
+  port: 8081
+
+discount-info:
+  url: http://localhost:8080
+
 
 spring:
   flyway:

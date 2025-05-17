@@ -2,7 +2,9 @@ package org.example.lab_2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
+@EnableFeignClients
 @SpringBootApplication(scanBasePackages = {
 		"org.example.lab_2",
 		"com.example.exception",

@@ -62,9 +62,40 @@ paths:
         '500':
           $ref: '#/components/responses/InternalErrorResponse'
 
+  /api/v1/{categoryId}/categoryInfo:
+    get:
+      tags:
+        - CategoryInfo
+      parameters:
+        - $ref: '#/components/parameters/categoryId'
+      summary: info для указанной категории товара
+      responses:
+        '200':
+          $ref: '#/components/responses/CategoryInfo'
+        '500':
+          $ref: '#/components/responses/InternalErrorResponse'
+
 
 components:
+  parameters:
+    categoryId:
+      name: categoryId
+      in: path
+      description: Идентификатор  категории
+      required: true
+      schema:
+        type: integer
+        format: int64
+
   responses:
+
+    CategoryInfo:
+      description: Cкидка для указанной категории товара
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CategoryInfo'
+
     ManufacturerStatisticDto:
       description: Список производителей
       content:
@@ -93,6 +124,25 @@ components:
             code404:
               $ref: '#/components/examples/Error404Example'
   schemas:
+    CategoryInfo:
+      type: object
+      properties:
+        categoryId:
+          description: Идентификатор категории
+          nullable: false
+          type: integer
+          format: int64
+        name:
+          description: Название категории
+          nullable: false
+          type: string
+          format: int64
+        discount:
+          description: Скидка в процентах
+          nullable: false
+          type: integer
+          format: int64
+
     ManufacturerStatisticDto:
       type: object
       properties:
